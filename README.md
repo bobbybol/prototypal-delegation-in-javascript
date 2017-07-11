@@ -53,7 +53,7 @@ function createAnimalAlso(genus, species) {
     );
 }
 ```
-Very cool! Now let's add a closure to that. A closure variable inside a factory function is **truly hidden** from the outside world. Unless you decide to give the animal a method to spoil the secret, of course..
+Very cool! Now let's add a closure to that. A closure variable inside a factory function is **truly hidden** from the outside world. Unless you decide to give the animal a method to spoil the secret, of course:
 ```javascript
 function createAnimalAlso(genus, species) {
     var _secretPassword = 'roarrrr';
@@ -73,5 +73,5 @@ function createAnimalAlso(genus, species) {
 var cheetah = createAnimalAlso('Acinonyx', 'jubatus');
 
 cheetah.writeName();    // Acinonyx jubatus
-cheetah.spoilSecret();  // roarrrr
+cheetah.spoilSecret();  // Acinonyx jubatus goes roarrrr..
 ```
