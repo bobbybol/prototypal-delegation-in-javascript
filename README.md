@@ -23,3 +23,55 @@ While this is a bit of a contrived example, you can see that we could have many 
 ```javascript
 var animalPrototype = Object.assign({}, _partial_binomialName, _partial_writeName);
 ```
+The way we create objects from here is to use **factory functions**. No constructors. Factory functions. Let's demonstrate this with a simple example first, where the factory creates a new object from the pre-existing prototype, and then we just add some properties to that object. Finally we return the object, so every time the factory function is called, we create a brand new animal.
+```javascript
+function createAnimal(genus, species) {
+    // Create a new object with `animalPrototype` as its prototype
+    var theObject = Object.create(animalPrototype);
+    
+    theObject.genus = genus;
+    theObject.species = species;
+    
+    return theObject;
+}
+```
+Now we can create objects like so, which have access to all the methods on the prototype:
+```javascript
+var polarBear = createAnimal('Ursus', 'maritimus');
+
+polarBear.writeName();  // Ursus maritimus
+```
+We can improve upon the above example, by combining everything into one return statement. This may be preferred for smaller factories, while in larger factories you might want to keep all objects you're using to finally construct your return object from in separate variables. In any case, the short syntax looks like this:
+```javascript
+function createAnimalAlso(genus, species) {
+    return Object.assign(
+        Object.create(animalPrototype), 
+        {
+            genus: genus,
+            species: species
+        }
+    );
+}
+```
+Very cool! Now let's add a closure to that. A closure variable inside a factory function is **truly hidden** from the outside world. Unless you decide to give the animal a method to spoil the secret, of course..
+```javascript
+function createAnimalAlso(genus, species) {
+    var _secretPassword = 'roarrrr';
+    
+    return Object.assign(
+        Object.create(animalPrototype), 
+        {
+            genus: genus,
+            species: species,
+            spoilSecret: function() {
+                console.log(this.binomialName() + ' goes ' + _secretPassword + '..');
+            }
+        }
+    );
+}
+
+var cheetah = createAnimalAlso('Acinonyx', 'jubatus');
+
+cheetah.writeName();    // Acinonyx jubatus
+cheetah.spoilSecret();  // roarrrr
+```
